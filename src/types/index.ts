@@ -1,5 +1,5 @@
 export interface IPage {
-    gallery: IGallery;
+    gallery: HTMLElement[];
 }
 
 export interface IGallery {
@@ -8,19 +8,18 @@ export interface IGallery {
 
 export interface ICard {
     category: string;
+    id: string;
     title: string;
+    description?: string;
     image: string;
     price: number;
-}
-
-export interface IProd extends ICard {
-    id: string;
-    description: string;
 }
 
 export interface IOrder {
     paymethod: string;
     address: string;
+    total: number;
+    items: string[];
 }
 
 export interface IInfo {
@@ -28,7 +27,8 @@ export interface IInfo {
     phone: string;
 }
 
-export interface ICart extends IOrder, IInfo {
-    items: IProd[];
+export interface ICart {
+    items: HTMLElement[];
     total: number;
+    selected: string[];
 }
