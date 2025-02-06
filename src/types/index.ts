@@ -1,34 +1,62 @@
-export interface IPage {
-    gallery: HTMLElement[];
+export type CardType = 
+'другое'
+'софт-скил'
+'дополнительное'
+'кнопка'
+'хард-скил';
+
+export type CardBasket = Pick<ICard, 'id' | 'title' | 'price'>;
+
+
+export interface IAppState {
+    catalog: ICard[];
+    basket: string[];
+    preview: string | null;
+    order: IOrder | null;
 }
 
-export interface IGallery {
-    items: ICard[];
+export interface IPage {
+    counter: number;
+    gallery: HTMLElement[];
+    locked: boolean;
+}
+
+export interface IForm {
+    valid: boolean;
+    errors: string[];
 }
 
 export interface ICard {
-    category: string;
     id: string;
     title: string;
     description?: string;
+    price: number | null;
     image: string;
-    price: number;
+    category: CardType;
+    button: string;
 }
 
 export interface IOrder {
-    paymethod: string;
-    address: string;
-    total: number;
-    items: string[];
+    address?: string;
+    total?: number;
+    items?: string[];
+    email?: string;
+    phone?: string;
+    payment?: string;
 }
 
-export interface IInfo {
-    email: string;
-    phone: string;
+export interface IOrderResult {
+    id: string;
+    total: number;
 }
 
-export interface ICart {
-    items: HTMLElement[];
+export interface ISuccess {
+    close: HTMLButtonElement;
+    description: HTMLSpanElement;
     total: number;
-    selected: string[];
+}
+
+export interface IBasket {
+    items: CardBasket[];
+    total: number | null;
 }
