@@ -7,12 +7,20 @@ export type CardType =
 
 export type CardBasket = Pick<ICard, 'id' | 'title' | 'price'>;
 
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
+
 
 export interface IAppState {
     catalog: ICard[];
     basket: string[];
     preview: string | null;
     order: IOrder | null;
+}
+
+export interface IApi {
+    getCardItem: (id: string) => Promise<ICard>;
+    getCardList: () => Promise<ICard[]>;
+    orderItems(order: IOrder): Promise<IOrderResult>;
 }
 
 export interface IPage {
@@ -36,6 +44,10 @@ export interface ICard {
     button: string;
 }
 
+export interface ICardActions {
+    onClick: (event: MouseEvent) => void;
+}
+
 export interface IOrder {
     address?: string;
     total?: number;
@@ -56,7 +68,16 @@ export interface ISuccess {
     total: number;
 }
 
+export interface ISuccessEvents {
+    onClick: () => void;
+
+}
+
 export interface IBasket {
     items: CardBasket[];
     total: number | null;
+}
+
+export interface IModalData {
+    content: HTMLElement;
 }
