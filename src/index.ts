@@ -33,6 +33,12 @@ const basket = new Basket(cloneTemplate(basketTemplate), events);
 const order = new Order(cloneTemplate(orderTemplate), events);
 const contacts = new Contacts(cloneTemplate(contactsTemplate), events);
 
+const successWindow = new Success(cloneTemplate(successTemplate), {
+    onClick: () => {
+        modal.close();
+    },
+});
+
 api.getCardList()
 .then((cards: ICard[]) => {
     appData.setCatalog(cards);
@@ -104,13 +110,14 @@ events.on('modal:close', () => {
 events.on('basket:changed', () => {
     page.counter = appData.basket.length;
     basket.total = appData.getTotalPrice();
+    let index = 1;
     basket.items = appData.basket.map((basketCard) => {
         const newBasketCard = new BasketCard(cloneTemplate(cardBasketTemplate), {
             onClick: () => {
                 appData.deleteFromBasket(basketCard);
             },
         });
-        newBasketCard.index = appData.getCardIndex(basketCard);
+        newBasketCard.index = index++;
         return newBasketCard.render({
             title: basketCard.title,
             price: basketCard.price,
@@ -166,17 +173,11 @@ events.on('order:submit', () => {
 });
 
 events.on('contacts:submit', () => {
-    appData.setBasketToOrder();
-    api.orderItems(appData.order)
+    const orderData = appData.setBasketToOrder();
+    api.orderItems(orderData)
     .then((res) => {
-        const successWindow = new Success(cloneTemplate(successTemplate), {
-            onClick: () => {
-                modal.close();
-            },
-        });
         appData.clearBasket();
         appData.clearOrderState();
-
         modal.render({ content: successWindow.render({ total: res.total }) });
     })
     .catch((err) => {

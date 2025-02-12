@@ -6,7 +6,7 @@ export class AppData extends Model<IAppState> {
     basket: ICard[] = [];
     preview: string | null = null;
     order: IOrder | null = {
-        total: 0,
+        total: null,
         items: [],
         email: '',
         phone: '',
@@ -104,8 +104,11 @@ export class AppData extends Model<IAppState> {
     }
 
     setBasketToOrder () {
-        this.order.items = this.basket.map((card) => card.id);
-        this.order.total = this.getTotalPrice();
+        return {
+            ...this.order, 
+            items: this.basket.map((card) => card.id),
+            total: this.getTotalPrice(),
+        };
     }
 
     validateOrder () {
